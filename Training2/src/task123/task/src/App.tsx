@@ -1,99 +1,77 @@
-import React, {Component} from 'react';
-import './App.css'
-import Modal from "./components/modal";
-import Progressbar from "./components/progress-bar";
+import React, {useState} from 'react';
+import './App.css';
+import Modal from "./components/modal-rfc";
+import Countdown from "./components/countdown";
 
-type TestModalContentState = {
-    formGroup: {
-        inputFieldValue: string;
-        error: string;
-    },
-    isStartProgress: boolean,
-    progress: number
+interface Form {
+    inputFieldValue: string;
+    error: string;
 }
 
-export class TestModalContent extends React.Component<any, TestModalContentState> {
-    constructor(props: {}) {
-        super(props);
-        this.state = {formGroup: {inputFieldValue: '', error: ''}, isStartProgress: false, progress: 0}
+
+export const TestModalContent = () => {
+    const [testForm, setTestForm] = useState<Form>({inputFieldValue: '', error: ''});
+    const [isStartCountdown, setIsStartCountdown] = useState<boolean>(false);
+    const [isStopCountdown, setIsStopCountdown] = useState<boolean>(false);
+
+    const setValueAndError = (value: string, error: string) => {
+        setTestForm(() => ({inputFieldValue: value, error: error}));
     }
 
-    setValueAndError = (value: string, error: string) => {
-        this.setState((prev: TestModalContentState) => ({formGroup: {inputFieldValue: value, error: error}}))
-    }
-
-    onFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
 
         if (!Number(inputValue)) {
             if (inputValue !== '') {
-                this.setValueAndError(e.target.value, 'Invalid input. Must be a number')
+                setValueAndError(e.target.value, 'Invalid input. Must be a number')
             } else {
-                this.setValueAndError(e.target.value, 'Please input a number')
+                setValueAndError(e.target.value, 'Please input a number')
             }
         } else {
             if (Number(inputValue) < 0) {
-                this.setValueAndError(e.target.value, 'Number must be greater than 0')
+                setValueAndError(e.target.value, 'Number must be greater than 0')
             } else {
-                this.setValueAndError(e.target.value, '')
+                setValueAndError(e.target.value, '')
             }
         }
     }
 
-    handleStart = () => {
-        this.setState((prevState: TestModalContentState) => ({isStartProgress: true}))
+    const handleStart = () => {
+        setIsStartCountdown((prevState) => !prevState);
     }
 
-    onProgressTrigger = (progress: number) => {
-        console.log(progress);
-        this.setState((prevState: TestModalContentState) => ({
-            progress: progress
-        }))
+    const handleStop = () => {
+        setIsStopCountdown((prevState) => !prevState);
     }
 
-    render() {
-        return (
-            <div className="modal-content">
-                <input type="text" placeholder="type something" value={this.state.formGroup.inputFieldValue}
-                       onChange={this.onFieldChange}/>
-                <p>{this.state.formGroup.error}</p>
-                {this.state.isStartProgress &&
-                    <Progressbar width={Number(this.state.formGroup.inputFieldValue)} progress={this.state.progress}
-                                 onTrigger={this.onProgressTrigger}/>}
-                <div>
-                    <button disabled={this.state.formGroup.error !== ''} onClick={this.handleStart}>Start</button>
-                </div>
+    return (
+        <div className="modal-content">
+            <input type="text" placeholder="type something" value={testForm.inputFieldValue}
+                   onChange={onFieldChange}/>
+            <p>{testForm.error}</p>
+            {isStartCountdown &&
+                <Countdown countDownNumber={Number(testForm.inputFieldValue)} isStop={isStopCountdown}/>}
+            <div>
+                <button disabled={testForm.error !== ''} onClick={handleStart}>Start</button>
+                {isStartCountdown && <button onClick={handleStop}>Stop</button>}
             </div>
-        )
-    };
-}
+        </div>
+    );
+};
 
 
-type AppState = {
-    isModalOpen: boolean
-}
-
-class App extends React.Component<{}, AppState> {
-
-    constructor(props: {}) {
-        super(props);
-        this.state = {isModalOpen: true}
+const App = () => {
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const handleModalOpenOrClose = () => {
+        setIsModalOpen((prevState) => !prevState);
     }
-
-    handleModalOpenOrClose = () => {
-        this.setState((prevState: { isModalOpen: boolean }) => ({isModalOpen: !prevState.isModalOpen}))
-    }
-
-    render() {
-        return (
-            <div className="App">
-                <button onClick={this.handleModalOpenOrClose}>Open Modal</button>
-                {this.state.isModalOpen &&
-                    <Modal handleModalOpenOrClose={this.handleModalOpenOrClose} title="Test Modal"
-                           content={<TestModalContent/>}/>}
-            </div>
-        );
-    }
-}
+    return (
+        <div className="App">
+            <button onClick={handleModalOpenOrClose}>Open Modal</button>
+            {isModalOpen && <Modal setOpen={handleModalOpenOrClose} title="Test Modal"
+                                   children={<TestModalContent/>}/>}
+        </div>
+    );
+};
 
 export default App;

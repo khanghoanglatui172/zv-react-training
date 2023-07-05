@@ -1,40 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 type ProgressBarProps = {
-    width: number;
-    progress: number
-    onTrigger: (progress: number) => void
+    barWidth: number;
+    progress: number;
 }
 
 const ProgressBar = (props: ProgressBarProps) => {
-    const [barWidth, setBarWidth] = useState<number>(props.width);
-    const [isStop, setIsStop] = useState<boolean>(false);
-
-    useEffect(() => {
-        if(barWidth !== 0 && !isStop) {
-            setTimeout(() => {
-                setBarWidth((prevState) => prevState - 1);
-            },100)
-        }
-    },[barWidth, isStop])
-
-    const handleStopProgress = () => {
-        setIsStop((prevState) => !prevState);
-        return props.onTrigger(barWidth)
-    }
-
+    const {barWidth, progress} = props
     return (
         <>
-            <span>{barWidth}</span>
-            <div className="progress-bar" style={{width: `${props.width}px`}}>
+            <div className="progress-bar" style={{width: `${barWidth}px`}}>
                 <div style={{
                     position: "absolute",
-                    width: `${barWidth}px`,
+                    width: `${progress}px`,
                     height: "100%",
                     background: "green"
                 }}/>
             </div>
-            <button onClick={handleStopProgress}>stop</button>
         </>
     );
 };

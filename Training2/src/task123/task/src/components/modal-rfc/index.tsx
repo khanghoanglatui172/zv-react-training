@@ -1,18 +1,20 @@
 import React from 'react';
-import ModalHeader from "../modal/modal-header";
-import ModalContent from "../modal/modal-content";
 
 type ModalProps = {
     title : string;
-    content : React.ReactElement;
-    handleModalOpenOrClose: () => void
+    children : React.ReactElement;
+    setOpen: (isOpen: boolean) => void;
 }
 
 function Modal(props: ModalProps) {
+    const {title, children, setOpen} = props;
     return (
         <div className="modal">
-            <ModalHeader title={props.title} onClose={props.handleModalOpenOrClose}/>
-            <ModalContent content={props.content}/>
+            <div className="modal-header">
+                <h3>{title}</h3>
+                <button onClick={() => setOpen(false)}>X</button>
+            </div>
+            {children && <div className="modal-content">{children}</div>}
         </div>
     );
 }
