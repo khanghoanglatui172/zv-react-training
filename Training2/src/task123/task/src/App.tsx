@@ -62,14 +62,18 @@ export const TestModalContent = () => {
 
 const App = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const handleModalOpenOrClose = () => {
-        setIsModalOpen((prevState) => !prevState);
+    const handleModalClose = () => {
+        setIsModalOpen(false);
     }
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
     return (
         <div className="App">
-            <button onClick={handleModalOpenOrClose}>Open Modal</button>
-            {isModalOpen && <Modal setOpen={handleModalOpenOrClose} title="Test Modal"
-                                   children={<TestModalContent/>}/>}
+            <button onClick={showModal}>Open Modal</button>
+            <Modal isOpen={isModalOpen} handleClose={handleModalClose} title="Test Modal">
+                <TestModalContent/>
+            </Modal>
         </div>
     );
 };

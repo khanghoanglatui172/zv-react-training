@@ -1,20 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 type ModalProps = {
-    title : string;
-    children : React.ReactElement;
-    setOpen: (isOpen: boolean) => void;
+    title: string;
+    isOpen: boolean;
+    children: React.ReactElement;
+    handleClose: (isOpen: boolean) => void;
 }
 
 function Modal(props: ModalProps) {
-    const {title, children, setOpen} = props;
+    const {title, children, handleClose, isOpen} = props;
+    const [isRendered, setIsRendered] = useState<boolean>(false)
+    let display = isOpen ? 'block' : 'none';
+
+    useEffect(() => {
+        if (isOpen) {
+            setIsRendered(true);
+        }
+    }, [isOpen])
+
     return (
         <div className="modal">
-            <div className="modal-header">
-                <h3>{title}</h3>
-                <button onClick={() => setOpen(false)}>X</button>
-            </div>
-            {children && <div className="modal-content">{children}</div>}
+            {isRendered && <div className="modal-content" style={{display: `${display}`}}>
+                <div className="modal-header">
+                    <h3>{title}</h3>
+                    <button onClick={() => handleClose(false)}>X</button>
+                </div>
+                {children && <div>{children}</div>}
+            </div>}
         </div>
     );
 }
