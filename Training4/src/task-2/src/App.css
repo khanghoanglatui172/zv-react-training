@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  padding: 100px;
 }
 
 .App-logo {
@@ -36,3 +37,28 @@
     transform: rotate(360deg);
   }
 }
+
+.search-bar {
+  padding: 10px;
+  font-size: large;
+}
+
+.country {
+  display: flex;
+  justify-content: space-around;
+  margin: 30px auto;
+}
+
+.country-info {
+  text-align: left;
+}
+
+.country-info h1 {
+  margin: 0;
+}
+
+.country-flag {
+  width: 200px;
+  height: 100px;
+}
+
