@@ -6,9 +6,9 @@ function App() {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [keyLogger, setKeyLogger] = useState<string>('')
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(keyLogger)
-    },[keyLogger])
+    }, [keyLogger])
 
     const handleKeyLog = (key: string) => {
         setKeyLogger((prevState) => prevState.concat(key))
@@ -17,7 +17,8 @@ function App() {
     return (
         <div className="App">
             <button onClick={() => setIsModalOpen(true)}>Open modal</button>
-            <Modal keepMounted={true} isOpen={isModalOpen} handleClose={() => setIsModalOpen((false))} onKeyPress={handleKeyLog}/>
+            <Modal isOpen={isModalOpen} handleClose={() => setIsModalOpen((false))}
+                   onKeyPress={handleKeyLog}/>
         </div>
     );
 }

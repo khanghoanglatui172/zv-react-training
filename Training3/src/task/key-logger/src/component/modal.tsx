@@ -7,13 +7,13 @@ type ModalProps = {
 }
 
 const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
-  const ref=  useRef<HTMLTextAreaElement>(null)
+    const ref = useRef<HTMLTextAreaElement>(null)
     const [isRendered, setIsRendered] = useState<boolean>(false)
     let display = isOpen ? 'block' : 'none';
 
     useEffect(() => {
-        if(isOpen) {
-             setIsRendered(true)
+        if (isOpen) {
+            setIsRendered(true)
         }
     }, [isOpen]);
 
@@ -22,11 +22,12 @@ const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
             onKeyPress(e.key);
         }
 
-        if(ref.current) {
+        if (ref.current) {
             ref.current.addEventListener("keydown", handleTxtAreaChange)
         }
-        return   ()=> {
-            if(ref.current){
+
+        return () => {
+            if (ref.current) {
                 ref.current.removeEventListener("keydown", handleTxtAreaChange)
             }
         }
@@ -35,7 +36,7 @@ const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
 
     return (
         <div className="modal" style={{display: `${display}`}}>
-            {isRendered && <div >
+            {isRendered && <div>
                 <div className="modal-header">
                     <h3>Write your letter</h3>
                     <button style={{display: "block"}} onClick={handleClose}>X</button>
