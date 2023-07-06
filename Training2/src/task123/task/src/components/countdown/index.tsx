@@ -21,7 +21,7 @@ const Countdown = (props: CountdownProps) => {
         return () => {
             clearTimeout(countdownTimeoutID)
         }
-    }, [progress])
+    }, [progress, isStop])
 
 
     const startCountdown = () => {
