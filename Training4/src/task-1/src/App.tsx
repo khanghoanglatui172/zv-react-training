@@ -46,7 +46,7 @@ function App() {
     return (
         <div className="App">
             <div className="card-container">
-                {!isLoading && jokes.data && renderJokes(jokes.data)}
+                {renderJokes(jokes.data)}
             </div>
             {jokes.error && <p>Its not ok sir SOS</p>}
             {isLoading && <p>Loading ...</p>}
