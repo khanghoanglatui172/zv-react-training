@@ -41,7 +41,15 @@
   margin: auto;
   width: 500px;
   background-color: #b17ce3;
-  border: 1px solid black;
+}
+
+.modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+}
+.modal .modal-header h3 {
+  margin: 0;
 }
 
 .modal textarea {

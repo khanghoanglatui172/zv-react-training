@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Modal from "./component/modal";
 
@@ -17,8 +16,8 @@ function App() {
 
     return (
         <div className="App">
-            <button onClick={() => setIsModalOpen((prevState) => !prevState)}>Open modal</button>
-            {isModalOpen && <Modal onKeyPress={handleKeyLog}/>}
+            <button onClick={() => setIsModalOpen(true)}>Open modal</button>
+            <Modal keepMounted={true} isOpen={isModalOpen} handleClose={() => setIsModalOpen((false))} onKeyPress={handleKeyLog}/>
         </div>
     );
 }

@@ -1,25 +1,47 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 type ModalProps = {
-    onKeyPress: (text: string) => void
+    isOpen: boolean,
+    handleClose: () => void,
+    onKeyPress: (text: string) => void,
 }
 
-const Modal = (props: ModalProps) => {
-    useEffect(() => {
-        const element: any = document.getElementById('typeArea');
-        element.addEventListener("keydown", (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-           handleTxtAreaChange(e);
-        })
-    }, []);
+const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
+  const ref=  useRef<HTMLTextAreaElement>(null)
+    const [isRendered, setIsRendered] = useState<boolean>(false)
+    let display = isOpen ? 'block' : 'none';
 
-    const handleTxtAreaChange = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        props.onKeyPress(e.key);
-    }
+    useEffect(() => {
+        if(isOpen) {
+             setIsRendered(true)
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        const handleTxtAreaChange = (e: KeyboardEvent) => {
+            onKeyPress(e.key);
+        }
+
+        if(ref.current) {
+            ref.current.addEventListener("keydown", handleTxtAreaChange)
+        }
+        return   ()=> {
+            if(ref.current){
+                ref.current.removeEventListener("keydown", handleTxtAreaChange)
+            }
+        }
+
+    }, [isRendered]);
 
     return (
-        <div className="modal">
-            <h3>Write your letter</h3>
-            <textarea id="typeArea" placeholder="type your password"/>
+        <div className="modal" style={{display: `${display}`}}>
+            {isRendered && <div >
+                <div className="modal-header">
+                    <h3>Write your letter</h3>
+                    <button style={{display: "block"}} onClick={handleClose}>X</button>
+                </div>
+                <textarea ref={ref} id="typeArea" placeholder="type your password"/>
+            </div>}
         </div>
     );
 };
