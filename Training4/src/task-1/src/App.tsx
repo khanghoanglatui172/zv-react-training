@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer, useState, useCallback} from 'react';
 import './App.css';
-import {Joke} from "./interfaces/Joke";
+import {Joke} from "./interfaces/joke";
 import axios, {AxiosResponse} from "axios";
 import JokeCard from "./component/joke-card";
 import {jokeReducer} from "./reducer/joke-reducer";
