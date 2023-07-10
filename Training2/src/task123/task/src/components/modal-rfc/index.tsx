@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 type ModalProps = {
     title: string;
@@ -9,16 +9,18 @@ type ModalProps = {
 
 function Modal(props: ModalProps) {
     const {title, children, handleClose, isOpen} = props;
-    const isRendered = useRef(isOpen)
+    const [isRendered, setIsRendered] = useState<boolean>(isOpen)
     let display = isOpen ? 'block' : 'none';
 
     useEffect(() => {
-        isRendered.current = true
-    }, [])
+        if (isOpen) {
+            setIsRendered(true);
+        }
+    }, [isOpen])
 
     return (
         <div className="modal">
-            {isRendered.current && <div className="modal-content" style={{display: `${display}`}}>
+            {isRendered && <div className="modal-content" style={{display: `${display}`}}>
                 <div className="modal-header">
                     <h3>{title}</h3>
                     <button onClick={() => handleClose(false)}>X</button>

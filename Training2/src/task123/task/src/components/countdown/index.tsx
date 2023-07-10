@@ -3,26 +3,28 @@ import Progressbar from "../progress-bar-rfc";
 
 type CountdownProps = {
     countDownNumber: number;
-    isStop: boolean;
 }
 
 const Countdown = (props: CountdownProps) => {
-    const {countDownNumber, isStop} = props
+    const {countDownNumber} = props
     const [progress, setProgress] = useState<number>(countDownNumber);
 
+    let countdownTimeoutID: NodeJS.Timer
+
     useEffect(() => {
-        const countdownTimeoutID = startCountdown();
+        countdownTimeoutID = startCountdown();
         if (progress === 0) {
             clearTimeout(countdownTimeoutID)
         }
-        if (isStop) {
-            clearTimeout(countdownTimeoutID);
-        }
-        return () => {
-            clearTimeout(countdownTimeoutID)
-        }
-    }, [progress, isStop])
+    }, [progress])
 
+    useEffect(() => {
+        return () =>  clearTimeout(countdownTimeoutID);
+    }, [])
+
+    const handleStop = () => {
+        clearTimeout(countdownTimeoutID);
+    }
 
     const startCountdown = () => {
         return setTimeout(() => {
@@ -34,6 +36,7 @@ const Countdown = (props: CountdownProps) => {
         <div>
             <span>{progress}</span>
             <Progressbar barWidth={countDownNumber} progress={progress}/>
+           <button onClick={handleStop}>Stop</button>
         </div>
     );
 };

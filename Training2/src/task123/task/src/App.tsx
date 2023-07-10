@@ -12,7 +12,6 @@ interface Form {
 export const TestModalContent = () => {
     const [testForm, setTestForm] = useState<Form>({inputFieldValue: '', error: ''});
     const [isStartCountdown, setIsStartCountdown] = useState<boolean>(false);
-    const [isStopCountdown, setIsStopCountdown] = useState<boolean>(false);
 
     const setValueAndError = (value: string, error: string) => {
         setTestForm(() => ({inputFieldValue: value, error: error}));
@@ -40,9 +39,7 @@ export const TestModalContent = () => {
         setIsStartCountdown((prevState) => !prevState);
     }
 
-    const handleStop = () => {
-        setIsStopCountdown((prevState) => !prevState);
-    }
+
 
     return (
         <div className="modal-content">
@@ -50,10 +47,9 @@ export const TestModalContent = () => {
                    onChange={onFieldChange}/>
             <p>{testForm.error}</p>
             {isStartCountdown &&
-                <Countdown countDownNumber={Number(testForm.inputFieldValue)} isStop={isStopCountdown}/>}
+                <Countdown countDownNumber={Number(testForm.inputFieldValue)}/>}
             <div>
                 <button disabled={testForm.error !== ''} onClick={handleStart}>Start</button>
-                {isStartCountdown && <button onClick={handleStop}>Stop</button>}
             </div>
         </div>
     );
@@ -62,12 +58,11 @@ export const TestModalContent = () => {
 
 const App = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [isModalOpen2, setIsModalOpen2] = useState<boolean>(false);
     const handleModalClose = () => {
         setIsModalOpen(false);
     }
     const showModal = () => {
-        setIsModalOpen2(true);
+        setIsModalOpen(true);
     };
     return (
         <div className="App">
