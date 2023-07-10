@@ -62,11 +62,12 @@ export const TestModalContent = () => {
 
 const App = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isModalOpen2, setIsModalOpen2] = useState<boolean>(false);
     const handleModalClose = () => {
         setIsModalOpen(false);
     }
     const showModal = () => {
-        setIsModalOpen(true);
+        setIsModalOpen2(true);
     };
     return (
         <div className="App">
