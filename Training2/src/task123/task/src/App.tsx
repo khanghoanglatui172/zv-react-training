@@ -8,11 +8,10 @@ interface Form {
     error: string;
 }
 
-
 export const TestModalContent = () => {
     const [testForm, setTestForm] = useState<Form>({inputFieldValue: '', error: ''});
     const [isStartCountdown, setIsStartCountdown] = useState<boolean>(false);
-
+    const [tempValue, setTempValue] = useState<number>(0)
     const setValueAndError = (value: string, error: string) => {
         setTestForm(() => ({inputFieldValue: value, error: error}));
     }
@@ -36,20 +35,24 @@ export const TestModalContent = () => {
     }
 
     const handleStart = () => {
+        setTempValue(+testForm.inputFieldValue);
         setIsStartCountdown((prevState) => !prevState);
+
     }
 
-
+    const handleReset = () => {
+        setTempValue(+testForm.inputFieldValue);
+    }
 
     return (
         <div className="modal-content">
-            <input type="text" placeholder="type something" value={testForm.inputFieldValue}
-                   onChange={onFieldChange}/>
+            <input type="text" placeholder="type something" onChange={onFieldChange}/>
             <p>{testForm.error}</p>
             {isStartCountdown &&
-                <Countdown countDownNumber={Number(testForm.inputFieldValue)}/>}
+                <Countdown countDownNumber={tempValue}/>}
             <div>
                 <button disabled={testForm.error !== ''} onClick={handleStart}>Start</button>
+                <button onClick={handleReset}>Reset</button>
             </div>
         </div>
     );

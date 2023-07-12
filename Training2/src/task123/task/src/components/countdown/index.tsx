@@ -15,8 +15,16 @@ const Countdown = (props: CountdownProps) => {
         return () => clearInterval(countdownID.current);
     }, [])
 
-    const handleStop = () => {
+    useEffect(() => {
+        setProgress(countDownNumber)
+    }, [countDownNumber])
+
+    const handlePause = () => {
         clearInterval(countdownID.current);
+    }
+
+    const handleResume = () => {
+        countdownID.current = startCountdown();
     }
 
     const startCountdown = () => {
@@ -32,7 +40,8 @@ const Countdown = (props: CountdownProps) => {
         <div>
             <span>{progress}</span>
             <Progressbar barWidth={countDownNumber} progress={progress}/>
-            <button onClick={handleStop}>Stop</button>
+            <button onClick={handlePause}>Pause</button>
+            <button onClick={handleResume}>Resume</button>
         </div>
     );
 };
