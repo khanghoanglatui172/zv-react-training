@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Progressbar from "../progress-bar-rfc";
 
 type CountdownProps = {
@@ -7,28 +7,24 @@ type CountdownProps = {
 
 const Countdown = (props: CountdownProps) => {
     const {countDownNumber} = props
+    const countdownID = useRef<NodeJS.Timer>()
     const [progress, setProgress] = useState<number>(countDownNumber);
 
-    let countdownTimeoutID: NodeJS.Timer
-
     useEffect(() => {
-        countdownTimeoutID = startCountdown();
-        if (progress === 0) {
-            clearTimeout(countdownTimeoutID)
-        }
-    }, [progress])
-
-    useEffect(() => {
-        return () =>  clearTimeout(countdownTimeoutID);
+        countdownID.current = startCountdown();
+        return () => clearInterval(countdownID.current);
     }, [])
 
     const handleStop = () => {
-        clearTimeout(countdownTimeoutID);
+        clearInterval(countdownID.current);
     }
 
     const startCountdown = () => {
-        return setTimeout(() => {
-            setProgress((prevState) => prevState - 1);
+        return setInterval(() => {
+            setProgress((prevState) => {
+                if (prevState === 0) return prevState
+                return prevState - 1
+            });
         }, 1000)
     }
 
@@ -36,7 +32,7 @@ const Countdown = (props: CountdownProps) => {
         <div>
             <span>{progress}</span>
             <Progressbar barWidth={countDownNumber} progress={progress}/>
-           <button onClick={handleStop}>Stop</button>
+            <button onClick={handleStop}>Stop</button>
         </div>
     );
 };
