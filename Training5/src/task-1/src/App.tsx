@@ -5,7 +5,7 @@ import axios from 'axios';
 import {useDispatch, useSelector} from "react-redux";
 import {ITodo} from "./interfaces/todo.interface";
 import AddTodoForm from "./component/add-todo-form";
-import {GET_TODO_LIST_BY_FILTER, GET_TODO_LIST_FAILED, GET_TODO_LIST_SUCCESS} from "./reducer/todo.slice";
+import {getTodoList, getTodoListByFilter} from "./reducer/todo.slice";
 import SearchFilterTodo from "./component/search-filter-todo";
 
 const base_url = 'http://localhost:9000/todos'
@@ -24,9 +24,7 @@ function App() {
         setLoading(true)
         axios.get(`${base_url}`).then((res) => {
             setLoading(false);
-            dispatch(GET_TODO_LIST_SUCCESS(res.data))
-        }).catch((err) => {
-            dispatch(GET_TODO_LIST_FAILED(err))
+            dispatch(getTodoList(res.data))
         })
     }
 
@@ -69,13 +67,13 @@ function App() {
                 filteredTodos = todoStore.data.filter((todo: ITodo) => todo.name.toLowerCase().includes(lowerNameTodo))
                 if(status) {
                     filteredTodos = filteredTodos.filter((todo: ITodo) => todo.completed)
-                    dispatch(GET_TODO_LIST_BY_FILTER(filteredTodos))
+                    dispatch(getTodoListByFilter(filteredTodos))
                 }
-                dispatch(GET_TODO_LIST_BY_FILTER(filteredTodos))
+                dispatch(getTodoListByFilter(filteredTodos))
             } else {
                 if(status) {
                     filteredTodos = todoStore.data.filter((todo: ITodo) => (todo.completed))
-                    dispatch(GET_TODO_LIST_BY_FILTER(filteredTodos))
+                    dispatch(getTodoListByFilter(filteredTodos))
                 } else {
                     fetchTodoList()
                 }

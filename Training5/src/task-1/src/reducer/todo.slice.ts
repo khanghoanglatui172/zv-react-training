@@ -15,26 +15,21 @@ const todoSlice = createSlice({
     name: 'todo',
     initialState ,
     reducers:{
-        GET_TODO_LIST_SUCCESS(state, action){
+        getTodoList(state, action){
             state.data = action.payload
             state.error = null
         },
-        GET_TODO_LIST_BY_FILTER(state, action) {
+        getTodoListByFilter(state, action) {
             state.data = action.payload
             state.error = null
         },
-        GET_TODO_LIST_FAILED(state, action) {
-            state.data = []
-            state.error = action.payload
-        }
     }
 })
 
 const { actions, reducer } = todoSlice;
 export const {
-    GET_TODO_LIST_SUCCESS,
-    GET_TODO_LIST_FAILED,
-    GET_TODO_LIST_BY_FILTER,
+    getTodoList,
+    getTodoListByFilter,
 } = actions;
 
 export default reducer
