@@ -1,38 +1,156 @@
 .App {
-  text-align: center;
+    text-align: center;
+}
+
+.App ul {
+    margin: 0;
+    padding: 0;
+}
+
+.App ul li {
+    list-style-type: none;
+    margin-bottom: 7px;
+    padding: 0;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+    padding: 10px 100px;
+    background-color: #c3d2ef;
+}
+
+.nav-left {
+    width: 50px;
+    height: 50px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.nav-bar .nav-right .avatar {
+    width: 50px;
+    height: 50px;
+    border: 1px solid;
+    border-radius: 50%;
+    position: relative;
+}
+
+.avatar span {
+    line-height: 45px;
+}
+
+.nav-right {
+    cursor: pointer;
+}
+
+.nav-right .dropdown {
+    position: absolute;
+    left: -40px;
+    top: 50px;
+    background-color: #dedee1;
+    width: 150px;
+    border: 1px solid;
+    visibility: hidden;
+}
+
+.nav-right:hover .dropdown {
+    visibility: visible;
+}
+
+
+.dropdown ul {
+    margin: 0;
+    padding: 0;
+    padding: 10px 0;
+}
+
+.dropdown ul li {
+    list-style-type: none;
+    margin-bottom: 7px;
+    padding: 0;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    transform: translateY(250%);
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 200px;
+}
+
+.login-container form input {
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: medium;
+}
+
+.home-container {
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+
+.side-bar {
+    border-right: 1px solid #61dafb;
+}
+
+.side-bar ul {
+    margin: 0;
+    padding: 0;
+}
+
+.side-bar ul li {
+    list-style-type: none;
+    margin: 10px 0;
+}
+
+.users-container {
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+
+.user-list {
+    border-right: 1px solid #61dafb;
 }
