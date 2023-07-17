@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 type ModalProps = {
     isOpen: boolean,
@@ -7,7 +7,6 @@ type ModalProps = {
 }
 
 const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
-    const ref = useRef() as React.MutableRefObject<HTMLTextAreaElement>
     const [isRendered, setIsRendered] = useState<boolean>(false)
 
     let display = isOpen ? 'block' : 'none';
@@ -23,12 +22,12 @@ const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
         const handleKeyDown = (e: KeyboardEvent) => {
             onKeyPress(e.key);
         }
-
-        if (ref && ref.current) {
-            ref.current.addEventListener("keydown", handleKeyDown)
+        const loggerArea = document.getElementById('textArea')
+        if (loggerArea) {
+            loggerArea.addEventListener("keydown", handleKeyDown)
 
             return () => {
-                ref.current.addEventListener("keydown", handleKeyDown)
+                loggerArea.addEventListener("keydown", handleKeyDown)
             }
         }
 
@@ -42,7 +41,7 @@ const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
                     <h3>Write your letter</h3>
                     <button style={{display: "block"}} onClick={handleClose}>X</button>
                 </div>
-                <textarea ref={ref} id="typeArea" placeholder="type your password"/>
+                <textarea id='textArea' placeholder="type your password"/>
             </div>}
         </div>
     );
