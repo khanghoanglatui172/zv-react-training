@@ -1,4 +1,4 @@
-import React, {useCallback, useReducer, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
 import Country from "./component/country";
 import {countryReducer} from "./reducer/country-reducer";
@@ -35,12 +35,20 @@ function App() {
             })
     }
 
-    const handleSearch = (e:  React.ChangeEvent<HTMLInputElement>) => {
-            setSearch(e.target.value);
-            searchCountry(e.target.value);
+    useEffect(() => {
+        if(search !== '') {
+            fetchCountry(search)
+        }
+    }, [search])
+
+    const handleSetSearch = debounce((keyword: string) => {
+        setSearch(keyword)
+    }, 1000)
+
+    const handleOnchange = (e:  React.ChangeEvent<HTMLInputElement>) => {
+        handleSetSearch(e.target.value)
     }
 
-    const searchCountry = useCallback(debounce(fetchCountry, 1000),[])
 
 
     const renderCountry = (country: any) => {
@@ -49,7 +57,7 @@ function App() {
 
     return (
         <div className="App">
-            <input value={search} onChange={handleSearch} className="search-bar" placeholder="search a country..."/>
+            <input onChange={handleOnchange} className="search-bar" placeholder="search a country..."/>
             {!isLoading ? renderCountry(country.data) : <p>Finding....</p>}
         </div>
     );

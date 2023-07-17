@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState, useCallback} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
 import {Joke} from "./interfaces/joke";
 import axios, {AxiosResponse} from "axios";
@@ -22,7 +22,7 @@ function App() {
     const [isLoading, setLoading] = useState<boolean>(true)
     const [jokes, dispatch] = useReducer(jokeReducer, initState)
     useEffect(() => {
-        throttleApiCall()
+        fetchJokes()
     }, [])
 
     const fetchJokes = () => {
@@ -30,13 +30,16 @@ function App() {
         axios.get(base_url)
             .then((res: AxiosResponse<Joke[]>) => {
                 setLoading(false);
-                dispatch({type: 'SUCCESS', data: res.data})
+                dispatch({type: 'SUCCESS', data: [res.data[0], res.data[2]]})
             })
             .catch((err) => {
                 dispatch({type: 'ERROR', data: err})
             })
     }
-    const throttleApiCall = useCallback(throttle(fetchJokes, 5000),[])
+
+    const handleGetMore = throttle(() => {
+        fetchJokes()
+    }, 5000)
 
     const renderJokes = (jokes: Joke[]) => {
         return jokes.map((joke) => <JokeCard key={joke.id} id={joke.id} type={joke.type} setup={joke.setup}
@@ -50,7 +53,7 @@ function App() {
             </div>
             {jokes.error && <p>Its not ok sir SOS</p>}
             {isLoading && <p>Loading ...</p>}
-            <button onClick={throttleApiCall}>Get more jokes</button>
+            <button onClick={handleGetMore}>Get more jokes</button>
         </div>
     );
 }
