@@ -36,3 +36,39 @@
     transform: rotate(360deg);
   }
 }
+
+.add-form {
+  margin-top: 50px;
+}
+
+.add-form input {
+  padding: 7px;
+  font-size: medium;
+}
+
+.task-container {
+  margin: 20px auto;
+  width: 500px;
+  padding: 10px;
+  border: 1px solid #282c34;
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+  margin-bottom: 10px;
+  border: 1px solid black;
+  padding: 7px;
+}
+
+.task p {
+  margin: 0;
+}
+
+.task span {
+  width: fit-content;
+  text-align: center;
+  padding: 7px;
+  border: 1px solid black;
+}
