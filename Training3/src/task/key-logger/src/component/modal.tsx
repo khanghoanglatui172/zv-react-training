@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
 type ModalProps = {
     isOpen: boolean,
@@ -7,8 +7,9 @@ type ModalProps = {
 }
 
 const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
-    const ref = useRef<HTMLTextAreaElement>(null)
+    const ref = useRef() as React.MutableRefObject<HTMLTextAreaElement>
     const [isRendered, setIsRendered] = useState<boolean>(false)
+
     let display = isOpen ? 'block' : 'none';
 
     useEffect(() => {
@@ -17,22 +18,22 @@ const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
         }
     }, [isOpen]);
 
+
     useEffect(() => {
-        const handleTxtAreaChange = (e: KeyboardEvent) => {
+        const handleKeyDown = (e: KeyboardEvent) => {
             onKeyPress(e.key);
         }
 
-        if (ref.current) {
-            ref.current.addEventListener("keydown", handleTxtAreaChange)
-        }
+        if (ref && ref.current) {
+            ref.current.addEventListener("keydown", handleKeyDown)
 
-        return () => {
-            if (ref.current) {
-                ref.current.removeEventListener("keydown", handleTxtAreaChange)
+            return () => {
+                ref.current.addEventListener("keydown", handleKeyDown)
             }
         }
 
     }, [isRendered]);
+
 
     return (
         <div className="modal" style={{display: `${display}`}}>
