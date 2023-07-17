@@ -11,6 +11,12 @@ const Countdown = (props: CountdownProps) => {
     const [progress, setProgress] = useState<number>(countDownNumber);
 
     useEffect(() => {
+        if (progress === 0) {
+            clearInterval(countdownID.current)
+        }
+    }, [progress])
+
+    useEffect(() => {
         countdownID.current = startCountdown();
         return () => clearInterval(countdownID.current);
     }, [])
@@ -30,7 +36,6 @@ const Countdown = (props: CountdownProps) => {
     const startCountdown = () => {
         return setInterval(() => {
             setProgress((prevState) => {
-                if (prevState === 0) return prevState
                 return prevState - 1
             });
         }, 1000)
