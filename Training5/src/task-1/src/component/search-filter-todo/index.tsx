@@ -1,31 +1,28 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import {debounce} from "lodash";
+import {useDispatch} from "react-redux";
+import {setSearchKeyword, setFilter} from "../../reducer/todo.slice";
 
-interface SearchCriteria {
-    name: string;
-    status: boolean
-}
+const SearchFilterTodo = () => {
+    const dispatch = useDispatch();
 
-type SearchFilterTodoProps = {
-    handleSearchFilter: ({name, status}: SearchCriteria) => void,
-}
-const SearchFilterTodo = ({handleSearchFilter}: SearchFilterTodoProps) => {
+    const handleOnchange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(setSearchKeyword(e.target.value));
+    }, 500)
 
-    const [checking, setChecking] = useState<boolean>(false)
-    const [name, setName] = useState<string>('')
-
-    useEffect(() => {
-        handleSearchFilter({name, status: checking});
-    }, [name, checking])
+    const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(setFilter(e.target.checked));
+    }
 
     return (
         <div className='search-filter'>
             <input type='text' placeholder='search todo' onChange={(e) =>
-                setName(e.target.value)
+                handleOnchange(e)
             }/>
             <div>
                 <label htmlFor="r1">Show Completed</label>
                 <input type="checkbox" name="completed-todo" id="r1" onChange={(e) =>
-                    setChecking(e.target.checked)
+                    handleCheck(e)
                 }/>
             </div>
         </div>

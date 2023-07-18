@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import './App.css';
 import Todo from "./component/todo";
 import axios from 'axios';
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {ITodo} from "./interfaces/todo.interface";
 import AddTodoForm from "./component/add-todo-form";
-import {getTodoList, getTodoListByFilter} from "./reducer/todo.slice";
+import {creatTodo, deleteTodo, getTodoList, updateTodo} from "./reducer/todo.slice";
 import SearchFilterTodo from "./component/search-filter-todo";
+import {useAppSelector} from "./hook/useAppSelector";
 
 const base_url = 'http://localhost:9000/todos'
 
@@ -18,7 +19,7 @@ function App() {
     }, [])
 
     const dispatch = useDispatch();
-    const todoStore = useSelector((state: any) => state.todos);
+    const todoStore = useAppSelector((state) => state.todos);
 
     const fetchTodoList = () => {
         setLoading(true)
@@ -36,58 +37,50 @@ function App() {
         })
     }
 
-    const handleDelete = (id: string) => {
-        axios.delete(`${base_url}/${id}`).then(() => {
-            fetchTodoList()
-        }).catch()
+    const handleDelete = async (id: string) => {
+        await axios.delete(`${base_url}/${id}`)
+        dispatch(deleteTodo(id))
     }
 
-    const handleCompleteOrIncomplete = (id: string, todoStatus: boolean) => {
-        axios.put(`${base_url}/${id}`, {
+    const handleCompleteOrIncomplete = async (id: string, todoStatus: boolean) => {
+        const todo = await axios.put(`${base_url}/${id}`, {
             completed: !todoStatus
-        }).then(() => {
-            fetchTodoList()
-        }).catch()
+        })
+        dispatch(updateTodo(todo.data))
     }
 
-    const handleAddTodo = (name: string) => {
-        axios.post(`${base_url}`, {
+    const handleAddTodo = async (name: string) => {
+       const todo =  await axios.post(`${base_url}`, {
             name: name,
             completed: false,
-        }).then(() => {
-            fetchTodoList()
-        }).catch()
+        })
+        dispatch(creatTodo(todo.data))
     }
 
-    const handleSearchFilter = ({name, status}: { name: string, status: boolean }) => {
-        if (Array(todoStore.data)) {
-            let filteredTodos: ITodo[] = []
-            if (name !== '') {
-                const lowerNameTodo = name.toLowerCase();
-                filteredTodos = todoStore.data.filter((todo: ITodo) => todo.name.toLowerCase().includes(lowerNameTodo))
-                if(status) {
-                    filteredTodos = filteredTodos.filter((todo: ITodo) => todo.completed)
-                    dispatch(getTodoListByFilter(filteredTodos))
-                }
-                dispatch(getTodoListByFilter(filteredTodos))
-            } else {
-                if(status) {
-                    filteredTodos = todoStore.data.filter((todo: ITodo) => (todo.completed))
-                    dispatch(getTodoListByFilter(filteredTodos))
-                } else {
-                    fetchTodoList()
-                }
+    const handleSearchFilter = (name: string, status: boolean, data: ITodo[]) => {
+        let filteredTodos: ITodo[] = data
+        if (name !== '') {
+            const lowerNameTodo = name.toLowerCase();
+            filteredTodos = todoStore.data.filter((todo: ITodo) => todo.name.toLowerCase().includes(lowerNameTodo))
+            if (status) {
+                filteredTodos = filteredTodos.filter((todo: ITodo) => todo.completed)
+            }
+        } else {
+            if (status) {
+                filteredTodos = todoStore.data.filter((todo: ITodo) => (todo.completed))
             }
         }
+        return filteredTodos
     }
+    const todoList = useMemo(() => handleSearchFilter(todoStore.keyword, todoStore.filterStatus, todoStore.data), [todoStore.keyword, todoStore.filterStatus, todoStore.data])
 
     return (
         <div className="App">
             <h3>My Todo List</h3>
             <AddTodoForm handleAddTodo={handleAddTodo}/>
-            <SearchFilterTodo handleSearchFilter={handleSearchFilter}/>
+            <SearchFilterTodo/>
             <div className="todo-container">
-                {renderTodoList(todoStore.data)}
+                {renderTodoList(todoList)}
                 {loading && <p>Loading</p>}
             </div>
         </div>
