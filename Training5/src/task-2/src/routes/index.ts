@@ -4,15 +4,15 @@ import MyInfo from "../pages/my-info";
 export const homeRoutes = [
     {
         path: '/app/home',
-        element: Users()
+        element: Users
     },
     {
         path: '/app/users',
-        element: Users()
+        element: Users
     },
     {
         path: '/app/my-info',
-        element: MyInfo()
+        element: MyInfo
     }
 ]
 

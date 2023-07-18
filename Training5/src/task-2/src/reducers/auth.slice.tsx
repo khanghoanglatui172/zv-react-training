@@ -1,5 +1,6 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createSelector, createSlice} from '@reduxjs/toolkit'
 import {User} from "../interfaces/user.interface";
+import {RootState} from "../store";
 
 
 interface AuthState {
@@ -11,7 +12,10 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-    data: {userDetail: {id: '', email: '', fullName: '', role: ''}, token: ''},
+    data: {
+        userDetail: {id: '', email: '', fullName: '', role: ''},
+        token: ''
+    },
     error: null,
 }
 
@@ -35,5 +39,9 @@ export const {
     login,
     getUserDetail
 } = actions;
+
+const authSelector = (state: RootState) => state.auth
+
+export const getToken = createSelector(authSelector, (state) => state.data.token)
 
 export default reducer

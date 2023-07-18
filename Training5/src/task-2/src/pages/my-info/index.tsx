@@ -1,33 +1,26 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from "react-redux";
-import axios from "axios";
-import {base_url} from "../../App";
 import {getUserDetail} from "../../reducers/auth.slice";
 import {useAppSelector} from "../../hook/useAppSelector";
+import {fetchUserDetailAPIHandler} from "../../api/users.service";
 
 const MyInfo = () => {
     const dispatch = useDispatch();
-    const userData = useAppSelector((state) => state.root.auth.data)
-
+    const userDetail = useAppSelector((state) => state.auth.data.userDetail)
     useEffect(() => {
         fetchDetail()
     }, [])
 
-    const fetchDetail = () => {
-        axios.get(`${base_url}/api/users/my`,{
-            headers: {
-                Authorization: 'Bearer ' + userData.token
-            }
-        }).then(res=> {
-            dispatch(getUserDetail({userDetail: res.data}))
-        })
+    const fetchDetail = async () => {
+        const res = await fetchUserDetailAPIHandler();
+        dispatch(getUserDetail({userDetail: res}))
     }
 
     return (
         <div>
-            <p>{userData.userDetail.email}</p>
-            <p>{userData.userDetail.fullName}</p>
-            <p>{userData.userDetail.role}</p>
+            <p>{userDetail.email}</p>
+            <p>{userDetail.fullName}</p>
+            <p>{userDetail.role}</p>
         </div>
     );
 };

@@ -3,9 +3,7 @@ import {persistStore} from 'redux-persist';
 import rootReducer from '../reducers'
 
 const store = configureStore({
-    reducer: {
-        root: rootReducer,
-    },
+    reducer: rootReducer,
 })
 
 const persistor = persistStore(store)
