@@ -11,23 +11,23 @@ import Home from "./pages/home-page";
 import UserDetail from "./components/user-detail";
 import ProtectedRoute from "./routes/protected.route";
 import {useAppSelector} from "./hook/useAppSelector";
-import LoginRoute from "./routes/login.route";
+import {getToken} from "./reducers/auth.slice";
 
 export const base_url = 'http://localhost:9000'
 
 function App() {
 
-    const token = useAppSelector(state => state.auth.data.token);
+    const token = useAppSelector(getToken);
 
-    const isLogged = token !== '' ? true : false
+    const isLogged = token !== ''
 
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route index element={<LoginPage/>}/>
+                    <Route index element={<ProtectedRoute isLogged={isLogged}><HomePage/></ProtectedRoute>}/>
                     <Route path={'login'}
-                           element={<LoginRoute token={token}><LoginPage/></LoginRoute>}></Route>
+                           element={<LoginPage/>}></Route>
                     <Route path={'app'} element={<ProtectedRoute isLogged={isLogged}><HomePage/></ProtectedRoute>}>
                         <Route index path={'home'} element={<Home/>}/>
                         <Route path={'users'} element={<Users/>}>
