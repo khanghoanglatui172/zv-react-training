@@ -22,14 +22,8 @@ const Modal = ({isOpen, handleClose, onKeyPress}: ModalProps) => {
         const handleKeyDown = (e: KeyboardEvent) => {
             onKeyPress(e.key);
         }
-        const loggerArea = document.getElementById('textArea')
-        if (loggerArea) {
-            loggerArea.addEventListener("keydown", handleKeyDown)
 
-            return () => {
-                loggerArea.addEventListener("keydown", handleKeyDown)
-            }
-        }
+        document.addEventListener('keydown', handleKeyDown)
 
     }, [isRendered]);
 
