@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import './App.css';
 import Country from "./component/country";
 import {countryReducer} from "./reducer/country-reducer";
@@ -41,14 +41,16 @@ function App() {
         }
     }, [search])
 
-    const handleSetSearch = debounce((keyword: string) => {
-        setSearch(keyword)
-    }, 1000)
+
 
     const handleOnchange = (e:  React.ChangeEvent<HTMLInputElement>) => {
         handleSetSearch(e.target.value)
     }
 
+
+    const handleSetSearch = useCallback(debounce((keyword: string) => {
+        setSearch(keyword)
+    }, 1000),[])
 
 
     const renderCountry = (country: any) => {

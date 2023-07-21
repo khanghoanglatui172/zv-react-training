@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import './App.css';
 import {Joke} from "./interfaces/joke";
 import axios, {AxiosResponse} from "axios";
@@ -21,6 +21,7 @@ const initState: StateType = {
 function App() {
     const [isLoading, setLoading] = useState<boolean>(true)
     const [jokes, dispatch] = useReducer(jokeReducer, initState)
+
     useEffect(() => {
         fetchJokes()
     }, [])
@@ -37,9 +38,9 @@ function App() {
             })
     }
 
-    const handleGetMore = throttle(() => {
-        fetchJokes()
-    }, 5000)
+    const fetchJokesCallback = useCallback(fetchJokes, [setLoading, dispatch])
+
+    const handleGetMoreCallback = useCallback(throttle(fetchJokesCallback, 2000), [])
 
     const renderJokes = (jokes: Joke[]) => {
         return jokes.map((joke) => <JokeCard key={joke.id} id={joke.id} type={joke.type} setup={joke.setup}
@@ -53,7 +54,7 @@ function App() {
             </div>
             {jokes.error && <p>Its not ok sir SOS</p>}
             {isLoading && <p>Loading ...</p>}
-            <button onClick={handleGetMore}>Get more jokes</button>
+            <button onClick={handleGetMoreCallback}>Get more jokes</button>
         </div>
     );
 }
